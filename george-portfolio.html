@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Katru Sudheer George — Builder</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root{
+    --bg: #F1F0EA;
+    --bg-card: #FFFFFF;
+    --ink: #15172C;
+    --ink-dim: #5C5F78;
+    --indigo: #4438F2;
+    --coral: #FF6A45;
+    --line: rgba(21,23,44,0.10);
+    --line-strong: rgba(21,23,44,0.24);
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; }
+  body{
+    background: var(--bg); color: var(--ink);
+    font-family:'Inter', sans-serif; line-height:1.6; overflow-x:hidden;
+  }
+  ::selection{ background: var(--coral); color:#fff; }
+  a{ color:inherit; text-decoration:none; }
+  .mono{ font-family:'JetBrains Mono', monospace; }
+  .wrap{ max-width:960px; margin:0 auto; padding:0 32px; position:relative; z-index:1; }
+
+  /* circuit trace background */
+  .traces{ position:fixed; inset:0; z-index:0; pointer-events:none; opacity:0.5; }
+
+  nav{ position:sticky; top:0; z-index:50; background:rgba(241,240,234,0.88); backdrop-filter:blur(10px); border-bottom:1px solid var(--line); }
+  nav .wrap{ display:flex; justify-content:space-between; align-items:center; height:64px; }
+  .nav-mark{ font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:1.05rem; }
+  .nav-mark span{ color: var(--indigo); }
+  .nav-links{ display:flex; gap:26px; font-family:'JetBrains Mono', monospace; font-size:0.76rem; color: var(--ink-dim); }
+  .nav-links a:hover{ color: var(--coral); }
+  @media(max-width:640px){ .nav-links{ display:none; } }
+
+  .hero{ padding:100px 0 60px; }
+  .eyebrow{ font-family:'JetBrains Mono', monospace; font-size:0.76rem; color: var(--indigo); display:flex; align-items:center; gap:10px; margin-bottom:26px; }
+  .eyebrow::before{ content:""; width:24px; height:1px; background: var(--indigo); }
+  h1{ font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:clamp(2.4rem,5.6vw,4.2rem); line-height:1.06; letter-spacing:-0.01em; max-width:760px; }
+  h1 .hl{ color: var(--coral); }
+  .hero-sub{ margin-top:24px; max-width:540px; color: var(--ink-dim); font-size:1.04rem; }
+  .hero-links{ margin-top:38px; display:flex; gap:12px; flex-wrap:wrap; }
+  .pill{ font-family:'JetBrains Mono', monospace; font-size:0.78rem; border:1px solid var(--line-strong); border-radius:8px; padding:10px 18px; transition:all .2s; }
+  .pill:hover{ border-color: var(--indigo); color: var(--indigo); }
+  .pill.solid{ background: var(--ink); color:#F1F0EA; border-color:var(--ink); }
+  .pill.solid:hover{ background: var(--coral); border-color:var(--coral); color:#fff; }
+
+  /* signal waveform */
+  .waveform{ margin-top:56px; height:64px; }
+  .waveform svg{ width:100%; height:100%; display:block; }
+  .waveform path{ fill:none; stroke: var(--indigo); stroke-width:2; }
+  .waveform path.p2{ stroke: var(--coral); opacity:0.55; }
+
+  section{ padding:64px 0; border-top:1px solid var(--line); }
+  .row-label{ font-family:'JetBrains Mono', monospace; font-size:0.76rem; color: var(--ink-dim); display:flex; justify-content:space-between; margin-bottom:32px; }
+  .row-label .idx{ color: var(--coral); }
+  h2{ font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:clamp(1.6rem,2.8vw,2.1rem); margin-bottom:24px; letter-spacing:-0.01em; }
+
+  .about-text{ max-width:620px; color: var(--ink-dim); font-size:1.01rem; }
+  .about-text strong{ color: var(--ink); font-weight:600; }
+
+  .build-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px; }
+  .build-card{ background: var(--bg-card); border:1px solid var(--line); border-radius:12px; padding:26px; position:relative; transition:transform .25s, box-shadow .25s; }
+  .build-card:hover{ transform:translateY(-3px); box-shadow:0 12px 28px rgba(21,23,44,0.08); }
+  .node-dot{ width:9px; height:9px; border-radius:50%; background: var(--indigo); display:inline-block; margin-right:8px; }
+  .build-card .status{ font-family:'JetBrains Mono', monospace; font-size:0.7rem; color: var(--indigo); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:14px; display:flex; align-items:center; }
+  .build-card h3{ font-family:'Space Grotesk', sans-serif; font-weight:600; font-size:1.2rem; margin-bottom:10px; }
+  .build-card p{ color: var(--ink-dim); font-size:0.93rem; }
+
+  .stack-wrap{ display:flex; flex-wrap:wrap; gap:10px; }
+  .stack-chip{
+    font-family:'JetBrains Mono', monospace; font-size:0.82rem; color: var(--ink);
+    background: var(--bg-card); border:1px solid var(--line-strong); border-radius:100px; padding:9px 16px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .stack-chip::before{ content:""; width:6px; height:6px; border-radius:50%; background: var(--coral); }
+
+  .beyond-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; }
+  .beyond-item{ border-left:2px solid var(--indigo); padding-left:16px; }
+  .beyond-item .k{ font-family:'JetBrains Mono', monospace; font-size:0.72rem; color: var(--coral); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:6px; }
+  .beyond-item .v{ font-size:0.96rem; color: var(--ink); }
+
+  .edu-list{ display:flex; flex-direction:column; gap:0; }
+  .edu-row{ display:grid; grid-template-columns:1fr auto; gap:16px; padding:18px 0; border-top:1px solid var(--line); align-items:baseline; }
+  .edu-row:first-child{ border-top:none; }
+  .edu-row .school{ font-family:'Space Grotesk', sans-serif; font-weight:600; font-size:1.05rem; }
+  .edu-row .level{ color: var(--ink-dim); font-size:0.88rem; margin-top:2px; }
+  .edu-row .score{ font-family:'JetBrains Mono', monospace; color: var(--indigo); font-size:0.9rem; white-space:nowrap; }
+
+  footer{ padding:80px 0 56px; border-top:1px solid var(--line); }
+  footer h2{ max-width:520px; }
+  .contact-links{ margin-top:34px; display:flex; flex-wrap:wrap; gap:12px; }
+  .foot-meta{ margin-top:60px; display:flex; justify-content:space-between; color: var(--ink-dim); font-family:'JetBrains Mono', monospace; font-size:0.72rem; }
+  @media(max-width:640px){ .foot-meta{ flex-direction:column; gap:8px; } }
+
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } .waveform path{ animation:none !important; } }
+  :focus-visible{ outline:2px solid var(--indigo); outline-offset:3px; }
+
+  @keyframes dash{ to{ stroke-dashoffset:0; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="nav-mark">K<span>.</span>G</div>
+    <div class="nav-links">
+      <a href="#about">about</a>
+      <a href="#builds">builds</a>
+      <a href="#stack">stack</a>
+      <a href="#beyond">beyond</a>
+      <a href="#contact">contact</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">builder — web, iot, mobile</div>
+    <h1>Katru Sudheer George builds things that <span class="hl">connect</span> — apps, devices, and audiences.</h1>
+    <p class="hero-sub">Full-stack and IoT builder working across React, Node, and Flutter — with a running interest in where hardware, software, and public communication meet.</p>
+    <div class="hero-links">
+      <a class="pill solid" href="mailto:skilledge77@gmail.com">skilledge77@gmail.com</a>
+      <a class="pill" href="tel:9132972777">9132972777</a>
+      <a class="pill" href="#" target="_blank" rel="noopener">GitHub ↗</a>
+      <a class="pill" href="#" target="_blank" rel="noopener">LinkedIn ↗</a>
+    </div>
+    <div class="waveform">
+      <svg viewBox="0 0 900 64" preserveAspectRatio="none">
+        <path class="p2" id="wave2" d="M0,32 L60,32 L80,10 L100,54 L120,32 L200,32 L220,18 L240,46 L260,32 L900,32" />
+        <path id="wave1" d="M0,32 L100,32 L120,4 L140,60 L160,32 L280,32 L300,14 L320,50 L340,32 L900,32" />
+      </svg>
+    </div>
+  </div>
+</header>
+
+<section id="about">
+  <div class="wrap">
+    <div class="row-label"><span class="idx">01</span><span>about</span></div>
+    <h2>From circuit boards to the stage.</h2>
+    <p class="about-text">
+      I build across the stack — <strong>React, Node.js, MongoDB</strong> on the software side, <strong>IoT and Flutter</strong>
+      on the hardware-meets-mobile side — and I'm just as comfortable presenting the work as building it. I run events, create
+      content, and speak publicly as Vice President of the English Empyrean Club, alongside project work in AI/ML and connected devices.
+    </p>
+  </div>
+</section>
+
+<section id="builds">
+  <div class="wrap">
+    <div class="row-label"><span class="idx">02</span><span>builds</span></div>
+    <h2>What's on the bench.</h2>
+    <div class="build-grid">
+      <div class="build-card">
+        <div class="status"><span class="node-dot"></span>shipped</div>
+        <h3>Smart Baby Incubator</h3>
+        <p>Designed and implemented a baby incubator with intelligent monitoring — bridging IoT sensing with real-time safety alerts.</p>
+      </div>
+      <div class="build-card">
+        <div class="status"><span class="node-dot" style="background:var(--coral)"></span>in progress</div>
+        <h3>IoT-Powered App</h3>
+        <p>Currently developing an IoT-enabled mobile application in Flutter, connecting devices to a mobile interface in real time.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="stack">
+  <div class="wrap">
+    <div class="row-label"><span class="idx">03</span><span>stack</span></div>
+    <h2>Tools of the trade.</h2>
+    <div class="stack-wrap">
+      <span class="stack-chip">React.js</span>
+      <span class="stack-chip">Node.js</span>
+      <span class="stack-chip">MongoDB</span>
+      <span class="stack-chip">REST API Development</span>
+      <span class="stack-chip">AWS Hosting</span>
+      <span class="stack-chip">Flutter</span>
+      <span class="stack-chip">IoT Integration</span>
+    </div>
+  </div>
+</section>
+
+<section id="beyond">
+  <div class="wrap">
+    <div class="row-label"><span class="idx">04</span><span>beyond the build</span></div>
+    <h2>Off the bench.</h2>
+    <div class="beyond-grid">
+      <div class="beyond-item"><div class="k">Role</div><div class="v">Vice President, English Empyrean Club</div></div>
+      <div class="beyond-item"><div class="k">Role</div><div class="v">Member, VSSC (Student Success Center) Initiatives</div></div>
+      <div class="beyond-item"><div class="k">Practice</div><div class="v">Public Speaking</div></div>
+      <div class="beyond-item"><div class="k">Practice</div><div class="v">Content Creation</div></div>
+      <div class="beyond-item"><div class="k">Practice</div><div class="v">Event Management</div></div>
+      <div class="beyond-item"><div class="k">Interests</div><div class="v">AI & Machine Learning, IoT, Tech Innovation</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="education">
+  <div class="wrap">
+    <div class="row-label"><span class="idx">05</span><span>education</span></div>
+    <div class="edu-list">
+      <div class="edu-row">
+        <div>
+          <div class="school">Narayana Junior College</div>
+          <div class="level">Intermediate</div>
+        </div>
+        <div class="score">98% · JEE Mains 94 percentile</div>
+      </div>
+      <div class="edu-row">
+        <div>
+          <div class="school">Vidyanidhi IIT Talent School</div>
+          <div class="level">Schooling</div>
+        </div>
+        <div class="score"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="row-label"><span class="idx">06</span><span>contact</span></div>
+    <h2>Building something? Let's talk.</h2>
+    <div class="contact-links">
+      <a class="pill solid" href="mailto:skilledge77@gmail.com">Email</a>
+      <a class="pill" href="tel:9132972777">9132972777</a>
+      <a class="pill" href="#" target="_blank" rel="noopener">GitHub ↗</a>
+      <a class="pill" href="#" target="_blank" rel="noopener">LinkedIn ↗</a>
+    </div>
+    <div class="foot-meta">
+      <span>© 2026 Katru Sudheer George</span>
+      <span>Amalapuram, Andhra Pradesh, India</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!reduceMotion){
+    ['wave1','wave2'].forEach((id, i) => {
+      const el = document.getElementById(id);
+      const len = el.getTotalLength();
+      el.style.strokeDasharray = len;
+      el.style.strokeDashoffset = len;
+      el.style.animation = `dash ${2.2 + i*0.4}s ease-out forwards`;
+    });
+  }
+</script>
+
+</body>
+</html>
