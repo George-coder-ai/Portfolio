@@ -2,6 +2,10 @@
 
 A modern, responsive, and beautifully designed personal portfolio website built to showcase my projects, skills, and background. The site features a clean glassmorphism aesthetic with engaging micro-animations and a sleek waveform illustration to reflect my focus on both software and hardware.
 
+## 🌐 Live Demo
+The portfolio is currently live and deployed via Vercel. 
+Check it out here: **[https://george-mythili-s-projects1.vercel.app](https://george-mythili-s-projects1.vercel.app)**
+
 ## 🛠️ Stack & Technologies
 - **Frontend Core**: HTML, CSS, Vanilla JavaScript
 - **Design Elements**: SVG path animations, smooth scroll, responsive glassmorphic navigation.
