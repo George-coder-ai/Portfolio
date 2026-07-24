@@ -24,7 +24,7 @@ This is a static web page and requires no complicated setup. To view the site lo
    git clone https://github.com/George-coder-ai/Portfolio.git
    ```
 2. Navigate to the project directory.
-3. Simply open `george-portfolio.html` in any modern web browser.
+3. Simply open `index.html` in any modern web browser.
    - *Tip: You can also serve it via a local development server like VS Code's "Live Server" extension.*
 
 ## 📬 Contact
